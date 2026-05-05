@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QuickBite - Food Delivery</title>
+  
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  
+
+  <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- Include Navbar -->
+  {% include 'navbar.html' %}
+
+  <div class="p-5 mb-4 bg-warning bg-opacity-10 rounded-3">
+    <div class="container-fluid py-5 text-center">
+      <h1 class="display-5 fw-bold">⭐️ ORDER NOW! 30-MIN DELIVERY</h1>
+      <p class="fs-4">Hungry? Get <strong>50% OFF</strong> your first order!</p>
+      <a href="#restaurants" class="btn btn-primary btn-lg">Order Now</a>
+    </div>
+  </div>
+
+  <div class="container-fluid bg-danger text-white py-3 mb-4">
+    <div class="container text-center">
+      <p class="mb-0 fw-bold">🔥 LIMITED TIME: Free delivery on orders over $20! <a href="#" class="text-white text-decoration-underline">Order Now</a></p>
+    </div>
+  </div>
+<div class="container mb-4" id="restaurants">
+  <div class="btn-group" role="group">
+    <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary {% if not request.args.get('filter') %}active{% endif %}">All</a>
+
+    {% for category in categories %}
+      <a href="{{ url_for('main.index', filter=category.lower()) }}" 
+         class="btn btn-outline-secondary {% if request.args.get('filter') == category.lower() %}active{% endif %}">
+         {{ category }}
+      </a>
+    {% endfor %}
+  </div>
+</div>
+
+    
+  </div>
+
+  <div class="container mb-5">
+    <h4 class="mb-4">Best Deals</h4>
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="p-3 bg-success bg-opacity-10 rounded-3 border border-success border-opacity-25">
+          <h5>🎉 50% OFF First Order</h5>
+          <p class="small">Use code <span class="fw-bold">QUICK50</span> at checkout.</p>
+          <a href="#" class="btn btn-sm btn-success">Claim Offer</a>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="p-3 bg-primary bg-opacity-10 rounded-3 border border-primary border-opacity-25">
+          <h5>🍔 Combo Meal Deal</h5>
+          <p class="small">Burger + Fries + Drink for $9.99.</p>
+          <a href="#" class="btn btn-sm btn-primary">Order Now</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mb-5">
+    <h4 class="mb-4">Popular Cuisines</h4>
+    <div class="row g-3">
+      <div class="col-4 col-md-2 text-center">
+        <a href="#" class="text-decoration-none">
+          <div class="p-3 border rounded-3 hover-shadow">
+            <img src="{{ url_for('static', filename='img/pizza-icon.png') }}" alt="Pizza" class="img-fluid mb-2" width="40" />
+            <p class="mb-0">Pizza</p>
+          </div>
+        </a>
+      </div>
+      <div class="col-4 col-md-2 text-center">
+        <a href="#" class="text-decoration-none">
+          <div class="p-3 border rounded-3 hover-shadow">
+            <img src="{{ url_for('static', filename='img/sushi-icon.png') }}" alt="Sushi" class="img-fluid mb-2" width="40" />
+            <p class="mb-0">Sushi</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+      <div class="row g-4">
+{% for p in products %}
+  <div class="col-md-4">
+    <div class="card h-100">
+      <a href="{{ url_for('user.restaurant_detail', restaurant_id=p[7]) }}" class="text-decoration-none text-light">
+      <img
+        src="{{ url_for('static', filename=p[4]) }}"
+        class="card-img-top img-fluid"
+        alt="{{ p[1] }}" style="height: 200px; object-fit: cover;"
+      />
+      <div class="card-body">
+        <h5 class="card-title text-dark">{{ p[1] }}</h5> <!-- Product Name -->
+        <p class="card-text text-dark">{{ p[2] }}</p>     <!-- Description -->
+        <p class="fw-bold text-dark">${{ p[3] }}</p>       <!-- Price -->
+        <p class="text-muted small">Category: {{ p[5] }}</p> <!-- Category Name -->
+        <p class="text-muted small">Restaurant: {{ p[6] }}</p> <!-- Restaurant Name -->
+        <form action="{{ url_for('user.add_to_cart', product_id=p[0]) }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="btn btn-danger">Order Now</a>
+        </form>
+      </a>
+      </div>
+    </div>
+  </div>
+
+{% endfor %}
+</div>
+    </div>
+
+  <div class="container py-5 my-4 bg-light rounded-3">
+    <h2 class="text-center mb-5">How It Works</h2>
+    <div class="row text-center">
+      <div class="col-md-4 mb-4">
+        <div class="p-3">
+          <span class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center"
+            style="width: 50px; height: 50px; font-size: 1.5rem;">1</span>
+          <h5 class="mt-3">Choose a Restaurant</h5>
+          <p>Browse curated local options.</p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="p-3">
+          <span class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center"
+            style="width: 50px; height: 50px; font-size: 1.5rem;">2</span>
+          <h5 class="mt-3">Customize Your Order</h5>
+          <p>Add special instructions.</p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="p-3">
+          <span class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center"
+            style="width: 50px; height: 50px; font-size: 1.5rem;">3</span>
+          <h5 class="mt-3">Fast Delivery</h5>
+          <p>Track your order in real-time.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container py-5">
+    <h2 class="text-center mb-5">What Customers Say</h2>
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="p-4 shadow-sm rounded-3 h-100">
+          <p class="fst-italic">"Fast delivery and delicious food!"</p>
+          <div class="d-flex align-items-center">
+            <img src="{{ url_for('static', filename='img/user1.jpg') }}" alt="User" class="rounded-circle me-2" width="40" />
+            <div>
+              <h6 class="mb-0">Sarah K.</h6>
+              <div class="text-warning">⭐⭐⭐⭐⭐</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Floating Help Button -->
+  <a href="#" class="position-fixed bottom-0 end-0 m-4 p-3 bg-info text-white rounded-circle shadow" style="width: 60px; height: 60px;">
+    <i class="bi bi-question-lg fs-4"></i>
+  </a>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white py-4 mt-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-4">
+          <h5>QuickBite</h5>
+        </div>
+        <div class="col-md-4 mb-4">
+          <h5>Contact</h5>
+          <p>support@quickbite.com<br>+61 123 456 789</p>
+        </div>
+      </div>
+      <hr />
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>.restaurant-card {
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .restaurant-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        .restaurant-body {
+            padding: 15px;
+        }</style>
+    <div class="container py-5">
+        <h1 class="mb-4">Total Restaurants: {{ total }}</h1>
+
+        <div class="row">
+            {% for r in restaurants %}
+            <div class="col-md-6 col-lg-4">
+                <div class="restaurant-card bg-white">
+                    <img src="{{ url_for('static', filename=r[2] if r[2] else 'img/sushi.jpg') }}" class="restaurant-img" alt="{{ r[1] }}">
+
+                    <div class="restaurant-body">
+                        <h5 class="mb-1">{{ r[1] }}</h5>
+                        <p class="mb-0"><strong>Address:</strong> {{ r[3] }}</p>
+                        <p class="mb-0"><strong>Contact:</strong> {{ r[4] }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        
+    </div>
+</body>
+</html>
+{% endblock %}

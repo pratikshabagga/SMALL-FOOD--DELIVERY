@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QuickBite - Food Delivery</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Custom CSS -->
+    <link href="css/styles.css" rel="stylesheet" />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <span style="font-size: 1.5rem">🍔 QuickBite</span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-expanded="false"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Restaurants</a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="#">Offers</a></li>
+          </ul>
+          <form class="d-flex me-2">
+            <input
+              class="form-control"
+              type="search"
+              placeholder="Search restaurants..."
+              aria-label="Search"
+            />
+          </form>
+          <a href="delivery_request.html" class="btn btn-outline-danger me-2"
+            >Cart (0)</a
+          >
+          <a href="#" class="btn btn-primary">Login</a>
+        </div>
+      </div>
+    </nav>
+<div class="container mt-5">
+  <h2>Edit Product #{{ prod_id }}</h2>
+  <div class="card">
+    <div class="card-body">
+      <form method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="mb-3">
+          <label class="form-label">Product Name</label>
+          <input type="text" name="name" class="form-control" value="{{ product[0] }}" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Description</label>
+          <textarea name="description" class="form-control" rows="3" required>{{ product[1] }}</textarea>
+        </div>
+        <div class="mb-3 row">
+          <div class="col-md-6">
+            <label class="form-label">Price</label>
+            <input type="number" step="0.01" name="price" class="form-control" value="{{ product[2] }}" required />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Category</label>
+            <select name="category_id" class="form-select">
+              <option value="">-- Select Category --</option>
+              {% for id, name in categories %}
+                <option value="{{ id }}" {% if id == product[4] %}selected{% endif %}>{{ name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Current Image</label><br />
+          <img src="{{ url_for('static', filename=product[3]) }}" class="img-thumbnail" style="height:100px;" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Upload New Image (optional)</label>
+          <input type="file" name="image_file" class="form-control" accept="image/*" />
+        </div>
+        <button type="submit" class="btn btn-success">Save Changes</button>
+        <a href="{{ url_for('admin.products') }}" class="btn btn-secondary">Cancel</a>
+      </form>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Restaurants</title>
+    <!-- Bootstrap CSS -->
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
+</head>
+<body>
+  <!-- Include Navbar -->
+  {% include 'navbar.html' %}
+<div class="container mt-4">
+    <h1>Restaurants</h1>
+
+    {% if restaurants %}
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for r in restaurants %}
+          <div class="col">
+           
+            <a href="{{ url_for('user.restaurant_detail', restaurant_id=r[0]) }}" class="text-decoration-none text-dark">
+  <div class="card h-100">
+    <img src="{{ url_for('static', filename=r[4]) }}" class="card-img-top" alt="{{ r[1] }}" style="height: 200px; object-fit: cover;">
+    <div class="card-body">
+      <h5 class="card-title">{{ r[1] }}</h5>
+      <p class="card-text">{{ r[2] }}</p>
+      <p><strong>Contact:</strong> {{ r[3] }}</p>
+    </div>
+  </div>
+</a>
+
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>No restaurants found.</p>
+    {% endif %}
+</div>
+ 
+ <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Footer -->
+  <footer class="bg-dark text-white py-4 mt-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-4">
+          <h5>QuickBite</h5>
+        </div>
+        <div class="col-md-4 mb-4">
+          <h5>Contact</h5>
+          <p>support@quickbite.com<br>+61 123 456 789</p>
+        </div>
+      </div>
+      <hr />
+    </div>
+  </footer>
+</body>
+</html>

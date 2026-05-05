@@ -1,0 +1,61 @@
+{% extends "base.html" %} {% block content %}
+<h2 class="mb-4">Admin Dashboard</h2>
+
+<div class="row">
+  <!-- Total Restaurants Card -->
+  <div class="col-md-4 mb-3">
+    <div class="card text-white bg-primary">
+      <div class="card-body">
+        <h5 class="card-title">Total Restaurants</h5>
+        <p class="card-text">{{ restcount }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Total Products Card -->
+  <div class="col-md-4 mb-3">
+    <div class="card text-white bg-success">
+      <div class="card-body">
+        <h5 class="card-title">Total Products</h5>
+        <p class="card-text">{{ totalproduct }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Total Revenue Card -->
+  <div class="col-md-4 mb-3">
+    <div class="card text-white bg-warning">
+      <div class="card-body">
+        <h5 class="card-title">Total Revenue</h5>
+        <p class="card-text">${{ totalsale }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <!-- Recent Activities Table -->
+  <div class="col-md-12">
+    <h4 class="mb-3">Recent Activities</h4>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Activity</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for active in recent_activity %}
+        <tr>
+          <td>{{ active.date }}</td>
+          <td>{{ active.activity }}</td>
+          <td>{{ active.details }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

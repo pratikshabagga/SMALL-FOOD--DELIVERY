@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Delivery Request - QuickBite</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" /></head>
+<body>
+
+  <!-- Include Navbar -->
+  {% include 'navbar.html' %}
+<div class="container py-5">
+  <div class="row">
+    <div class="col-lg-8">
+      <h2 class="mb-4">Your Delivery Request</h2>
+
+      {% if products %}
+        <div class="card mb-4">
+          <div class="card-body">
+            {% for product in products %}
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">{{ product.name }}</h5>
+                <form action="{{ url_for('user.remove_from_cart', product_id=product.id) }}" method="post" style="display:inline;">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                  <button type="submit" class="btn btn-link text-danger small p-0">Remove</button>
+                </form>
+              </div>
+              <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                <div class="d-flex align-items-center">
+                  <img src="{{ url_for('static', filename=product.image_url) }}" alt="{{ product.name }}" width="50" class="me-3">
+                  <div>
+                    <h6 class="mb-0">{{ product.name }}</h6>
+                    <small class="text-muted">{{ product.description }}</small>
+                  </div>
+                </div>
+                <div class="d-flex align-items-center">
+                  <form action="{{ url_for('user.decrease_quantity', product_id=product.id) }}" method="post">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-outline-secondary btn-sm">-</button>
+                  </form>
+                  <input type="text" readonly class="form-control text-center mx-1" style="width: 50px;" value="{{ product.quantity }}">
+                  <form action="{{ url_for('user.increase_quantity', product_id=product.id) }}" method="post">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-outline-secondary btn-sm">+</button>
+                  </form>
+                  <span class="fw-bold ms-3">${{ '%.2f'|format(product.total_price) }}</span>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% else %}
+        <div class="alert alert-info">Your cart is empty.</div>
+      {% endif %}
+
+      <form method="POST" action="{{ url_for('user.checkout') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">Delivery Instructions</h5>
+            <textarea class="form-control" name="instructions" rows="3" placeholder="Add special instructions (e.g., gate code, leave at door)"></textarea>
+          </div>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-body">
+            <h6 class="mb-3">Delivery Option</h6>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="deliveryOption" id="standard" value="standard" checked>
+              <label class="form-check-label" for="standard">Standard (30–45 min)</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="deliveryOption" id="express" value="express">
+              <label class="form-check-label" for="express">Express (15–20 min) +$3.99</label>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-danger w-100 py-2">Proceed to Checkout</button>
+      </form>
+      <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary w-100 mt-2">Continue Ordering</a>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card sticky-top" style="top: 20px;">
+        <div class="card-body">
+          <h5 class="card-title">Order Summary</h5>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Subtotal ({{ total_items }} items)</span>
+            <span>${{ '%.2f'|format(subtotal) }}</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Delivery Fee</span>
+            <span>${{ '%.2f'|format(delivery_fee) }}</span>
+          </div>
+          <div class="d-flex justify-content-between mb-3">
+            <span>Tax</span>
+            <span>${{ '%.2f'|format(tax) }}</span>
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between fw-bold mb-4">
+            <span>Total</span>
+            <span>${{ '%.2f'|format(total) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<footer class="bg-dark text-white py-4 mt-5">
+  <div class="container">
+    <p class="text-center mb-0">&copy; QuickBite</p>
+  </div>
+</footer>
+
+</body>
+</html>
